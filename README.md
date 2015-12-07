@@ -1,5 +1,5 @@
 #hanabi
-##Hanabi card game simulator
+Hanabi card game simulator
 
 Allows simulation of different strategies on game outcomes.
 
