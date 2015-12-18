@@ -1,96 +1,36 @@
 
+# -----------------------------------------------
+# References
+# -----------------------------------------------
+
+# -----------------------------------------------
+# Libraries
+# -----------------------------------------------
+
 import random
 import os
 import time
 import sys
 
-###############
-### Build table
-###############
-
-turn = 0
-
-clues_remaining = 8
-
-turn_counter = 0
-
-game_over = False
-
-end_game = 0
-
-clue_available_play = [[0,0,0,0,0],[0,0,0,0,0]]
-
-clue_available_keep = [[0,0,0,0,0],[0,0,0,0,0]]
-
-lightning_reminaing = 3
-
-# Card = [Number,Colour]
-deck = [[1,1],[1,1],[1,1],[2,1],[2,1],[3,1],[3,1],[4,1],[4,1],[5,1],[1,2],[1,2],[1,2],[2,2],[2,2],[3,2],[3,2],[4,2],[4,2],[5,2],[1,3],[1,3],[1,3],[2,3],[2,3],[3,3],[3,3],[4,3],[4,3],[5,3],[1,4],[1,4],[1,4],[2,4],[2,4],[3,4],[3,4],[4,4],[4,4],[5,4],[1,5],[1,5],[1,5],[2,5],[2,5],[3,5],[3,5],[4,5],[4,5],[5,5]]
-
-# [G,W,R,Y,B]
-table = [0,0,0,0,0]
-
-card_number = 0
-
-card_colour = 1
-
-card_number_1 = 1
-card_number_2 = 2
-card_number_3 = 3
-card_number_4 = 4
-card_number_5 = 5
-
-
-card_colour_green = 1
-card_colour_white = 2
-card_colour_red = 3
-card_colour_yellow = 4
-card_colour_blue = 5
-
-log = ''
-
-discard_pile = []
-
-played_pile = []
-
-random.shuffle(deck)
-
-
-###############
-### Build Hands
-###############
-
-hand_play = [[],[]]
-
-hand_keep = [[],[]]
-
-hand_play_know = [[],[]]
-
-hand_keep_know = [[],[]]
-
-hand_throw = [[],[]]
-
-hand_throw_know = [[],[]]
-
-hand_full = [[],[]]
-
-hand_full_know = [[],[]]
-
-
-###############
-### Deal hands
-###############
-
-for deal in range(5):
-   for hands in range(len(hand_play)):
-      hand_play[hands].append(deck[0])
-      hand_play_know[hands].append([[0,0,0,0,0],[0,0,0,0,0]])
-      del deck[0]
+# -----------------------------------------------
+# Functions
+# -----------------------------------------------
 
 
 ###############
 ### Support Functions
 ###############
+
+
+def set_up_table():
+   # shuffle deck
+   random.shuffle(deck)
+   # deal hands
+   for deal in range(5):
+      for hands in range(len(hand_play)):
+         hand_play[hands].append(deck[0])
+         hand_play_know[hands].append([[0,0,0,0,0],[0,0,0,0,0]])
+         del deck[0]
 
 
 def build_hand_full(player):
@@ -599,8 +539,11 @@ def discard_keep_hand():
       log += '\n'+l
    return(turn_finished)
 
+###############
+### Play hanabi
+###############
 
-def play_henabi():
+def play_hanabi():
    global current_player
    global other_player
    global turn_star_0
@@ -608,6 +551,9 @@ def play_henabi():
    global turn_counter
    global turn
    global log
+   # set up table
+   set_up_table()
+   # loop through turns
    while check_game_over() == False:
       turn_counter += 1
       # reset turn finished flag to False
@@ -659,20 +605,117 @@ def play_henabi():
    # log
    log_table()
    # write score
-   with open(os.path.expanduser('~/Documents/201511-py_henabi/output_01.txt'),'a') as txtfile_out:
+   with open(os.path.expanduser(out_file),'a') as txtfile_out:
       txtfile_out.write(str(sum(table))+'\n')
 
 
+# -----------------------------------------------
+# Parameters
+# -----------------------------------------------
 
 ###############
-### Loop games
+### Input Output
 ###############
+
+out_file = '~/Git/hanabi/output.txt'
+log_file = '~/Git/hanabi/log.txt'
+
+###############
+### Build table
+###############
+
+turn = 0
+
+clues_remaining = 8
+
+turn_counter = 0
+
+game_over = False
+
+end_game = 0
+
+clue_available_play = [[0,0,0,0,0],[0,0,0,0,0]]
+
+clue_available_keep = [[0,0,0,0,0],[0,0,0,0,0]]
+
+lightning_reminaing = 3
+
+# Card = [Number,Colour]
+deck = [[1,1],[1,1],[1,1],[2,1],[2,1],[3,1],[3,1],[4,1],[4,1],[5,1],[1,2],[1,2],[1,2],[2,2],[2,2],[3,2],[3,2],[4,2],[4,2],[5,2],[1,3],[1,3],[1,3],[2,3],[2,3],[3,3],[3,3],[4,3],[4,3],[5,3],[1,4],[1,4],[1,4],[2,4],[2,4],[3,4],[3,4],[4,4],[4,4],[5,4],[1,5],[1,5],[1,5],[2,5],[2,5],[3,5],[3,5],[4,5],[4,5],[5,5]]
+
+# [G,W,R,Y,B]
+table = [0,0,0,0,0]
+
+card_number = 0
+
+card_colour = 1
+
+card_number_1 = 1
+card_number_2 = 2
+card_number_3 = 3
+card_number_4 = 4
+card_number_5 = 5
+
+card_colour_green = 1
+card_colour_white = 2
+card_colour_red = 3
+card_colour_yellow = 4
+card_colour_blue = 5
+
+log = ''
+
+discard_pile = []
+
+played_pile = []
+
+###############
+### Build Hands
+###############
+
+hand_play = [[],[]]
+
+hand_play_know = [[],[]]
+
+hand_keep = [[],[]]
+
+hand_keep_know = [[],[]]
+
+hand_throw = [[],[]]
+
+hand_throw_know = [[],[]]
+
+hand_full = [[],[]]
+
+hand_full_know = [[],[]]
+
+
+# -----------------------------------------------
+# Import
+# -----------------------------------------------
+
+
+# -----------------------------------------------
+# Body
+# -----------------------------------------------
 
 try:
-   play_henabi()
+   play_hanabi()
    print(log)
 except Exception as e:
+   # print log to console
    print(log)
    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
    print(e)
+   # write log to file
+   with open(os.path.expanduser(log_file),'a') as txtfile_out:
+      txtfile_out.write(log)
+      txtfile_out.write('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+      txtfile_out.write(e)
+
+
+# -----------------------------------------------
+# Export
+# -----------------------------------------------
+
+
 
