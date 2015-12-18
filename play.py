@@ -23,6 +23,10 @@ import sys
 
 
 def set_up_table():
+   global current_player
+   global other_player
+   global turn_star_0
+   global turn_star_1
    # shuffle deck
    random.shuffle(deck)
    # deal hands
@@ -31,6 +35,17 @@ def set_up_table():
          hand_play[hands].append(deck[0])
          hand_play_know[hands].append([[0,0,0,0,0],[0,0,0,0,0]])
          del deck[0]
+   # define current/other player
+   if turn == 0:
+      current_player = 0
+      other_player = 1
+      turn_star_0 = "*"
+      turn_star_1 = " "
+   else:
+      current_player = 1
+      other_player = 0
+      turn_star_0 = " "
+      turn_star_1 = "*"
 
 
 def build_hand_full(player):
@@ -321,7 +336,8 @@ def clue_positive_keep_hand():
                # finish turn
                turn_finished = True
                # log
-               #print('clue_positive_keep_hand (number)')
+               l = 'clue_positive_keep_hand (number)'
+               log += '\n'+l
                break
             if hand_keep[other_player][card][card_colour] > len(hand_play[other_player]):
                # update clue given
@@ -551,24 +567,11 @@ def play_hanabi():
    global turn_counter
    global turn
    global log
-   # set up table
-   set_up_table()
    # loop through turns
    while check_game_over() == False:
       turn_counter += 1
       # reset turn finished flag to False
       turn_finished = False 
-      # define current/other player
-      if turn == 0:
-         current_player = 0
-         other_player = 1
-         turn_star_0 = "*"
-         turn_star_1 = " "
-      else:
-         current_player = 1
-         other_player = 0
-         turn_star_0 = " "
-         turn_star_1 = "*"
       # log
       log_table()
       # start progression of actions
@@ -590,18 +593,18 @@ def play_hanabi():
          turn = 1
       else:
          turn = 0
+      # define current/other player
+      if turn == 0:
+         current_player = 0
+         other_player = 1
+         turn_star_0 = "*"
+         turn_star_1 = " "
+      else:
+         current_player = 1
+         other_player = 0
+         turn_star_0 = " "
+         turn_star_1 = "*"
    # Game finished
-   # define current/other player
-   if turn == 0:
-      current_player = 0
-      other_player = 1
-      turn_star_0 = "*"
-      turn_star_1 = " "
-   else:
-      current_player = 1
-      other_player = 0
-      turn_star_0 = " "
-      turn_star_1 = "*"
    # log
    log_table()
    # write score
@@ -609,8 +612,11 @@ def play_hanabi():
       txtfile_out.write(str(sum(table))+'\n')
 
 
+
+
+
 # -----------------------------------------------
-# Parameters
+# Variables
 # -----------------------------------------------
 
 ###############
@@ -699,7 +705,11 @@ hand_full_know = [[],[]]
 # -----------------------------------------------
 
 try:
+   # set up table
+   set_up_table()
+   # play hanabi
    play_hanabi()
+   # print log to console
    print(log)
 except Exception as e:
    # print log to console
