@@ -176,7 +176,7 @@ def deduce_card(position):
       else:
          card_possibilities_playable.append(0)
       # is this the last version of this card?
-      if card_possibilities.count(card_possibilities[card]):
+      if card_possibilities.count(card_possibilities[card]) == 1:
          card_possibilities_dontdiscard.append(1)
       else:
          card_possibilities_dontdiscard.append(0)
@@ -394,47 +394,44 @@ def play_deduced_card():
    global log
    turn_finished = False
    build_hand_full(current_player)
-   deduction = []
    for card in range(len(hand_full[current_player])):
-      deduction.append(deduce_card(card))
-   # try to play any card that all possibilities are playable
-   if turn_finished == False:
-      for card in range(len(hand_full[current_player])):
-         if sum(deduction[card][1]) == len(deduction[card][1]):
-            # increase relevent table by 1
-            table[hand_full[current_player][card][card_colour] - 1] += 1
-            # was card a five
-            if hand_full[current_player][card][card_number] == card_number_5:
-               # gain one clue
-               clues_remaining += 1
-            # determine which hand and position of card to be discarded
-            location = determine_hand_location(current_player,card)
-            # remove played card from hand
-            if location[0] == 1:
-               # located in keep hand
-               del hand_keep[current_player][location[1]]
-               del hand_keep_know[current_player][location[1]]
-            if location[0] == 2:
-               # located in play hand
-               del hand_play[current_player][location[1]]
-               del hand_play_know[current_player][location[1]]
-            if location[0] == 3:
-               # located in throw hand
-               del hand_throw[current_player][location[1]]
-               del hand_throw_know[current_player][location[1]]
-            # if cards remaining in deck
-            if len(deck) > 0:
-               # add card on top of deck to hand
-               hand_play[current_player].append(deck[0]) 
-               hand_play_know[current_player].append([[0,0,0,0,0],[0,0,0,0,0]])
-               # remove that card from the deck
-               del deck[0]   
-            # finish turn
-            turn_finished = True
-            # log
-            l = 'play_deduced_card: '+str(deduction[card][0])
-            log += '\n'+l
-            break
+      deduction = deduce_card(card) 
+      # try to play any card that all possibilities are playable
+      if sum(deduction[1]) == len(deduction[1]):
+         # increase relevent table by 1
+         table[hand_full[current_player][card][card_colour] - 1] += 1
+         # was card a five
+         if hand_full[current_player][card][card_number] == card_number_5:
+            # gain one clue
+            clues_remaining += 1
+         # determine which hand and position of card to be discarded
+         location = determine_hand_location(current_player,card)
+         # remove played card from hand
+         if location[0] == 1:
+            # located in keep hand
+            del hand_keep[current_player][location[1]]
+            del hand_keep_know[current_player][location[1]]
+         if location[0] == 2:
+            # located in play hand
+            del hand_play[current_player][location[1]]
+            del hand_play_know[current_player][location[1]]
+         if location[0] == 3:
+            # located in throw hand
+            del hand_throw[current_player][location[1]]
+            del hand_throw_know[current_player][location[1]]
+         # if cards remaining in deck
+         if len(deck) > 0:
+            # add card on top of deck to hand
+            hand_play[current_player].append(deck[0]) 
+            hand_play_know[current_player].append([[0,0,0,0,0],[0,0,0,0,0]])
+            # remove that card from the deck
+            del deck[0]   
+         # finish turn
+         turn_finished = True
+         # log
+         l = 'play_deduced_card: '+str(deduction[0])
+         log += '\n'+l
+         break
    return(turn_finished)
 
 
