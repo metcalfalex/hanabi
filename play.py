@@ -336,7 +336,7 @@ def clue_positive_keep_hand():
                # finish turn
                turn_finished = True
                # log
-               l = 'clue_positive_keep_hand (number)'
+               l = 'clue_positive_keep_hand (number): '+str(card+1)
                log += '\n'+l
                break
             if hand_keep[other_player][card][card_colour] > len(hand_play[other_player]):
@@ -349,7 +349,7 @@ def clue_positive_keep_hand():
                # finish turn
                turn_finished = True
                # log
-               l = 'clue_positive_keep_hand (colour)'
+               l = 'clue_positive_keep_hand (colour): '+str(card+1)
                log += '\n'+l
                break               
    return(turn_finished)
@@ -379,7 +379,11 @@ def clue_positive_play_hand():
                   # finish turn
                   turn_finished = True
                   # log
-                  l = 'clue_positive_play_hand'+' clue_value: '+str(clue_check[1])+' clue_type: '+str(clue_check[2])
+                  if clue_check[2] == card_number:
+                     clue_type = 'card_number'
+                  if clue_check[2] == card_colour:
+                     clue_type = 'card_colour'
+                  l = 'clue_positive_play_hand'+' clue_value: '+str(clue_check[1])+' clue_type: '+clue_type
                   log += '\n'+l
                   break
    return(turn_finished)
@@ -448,6 +452,8 @@ def play_clued_card_keep_hand():
          clues_remaining += 1
       # move card to played pile
       played_pile.append(hand_keep[current_player][clue_available_keep[current_player].index(1)])
+      # log card
+      l_card = hand_keep[current_player][clue_available_keep[current_player].index(1)]
       # remove played card from hand
       del hand_keep[current_player][clue_available_keep[current_player].index(1)]
       del hand_keep_know[current_player][clue_available_keep[current_player].index(1)]      
@@ -463,7 +469,7 @@ def play_clued_card_keep_hand():
       # finish turn
       turn_finished = True
       # log
-      l = 'play_clued_card_keep_hand'
+      l = 'play_clued_card_keep_hand: '+str(l_card)
       log += '\n'+l
    return(turn_finished)
 
@@ -481,6 +487,8 @@ def play_clued_card_play_hand():
       if hand_play[current_player][clue_available_play[current_player].index(1)][card_number] == card_number_5:
          # gain one clue
          clues_remaining += 1
+      # log card
+      l_card = hand_play[current_player][clue_available_play[current_player].index(1)]
       # remove played card from hand
       del hand_play[current_player][clue_available_play[current_player].index(1)]
       del hand_play_know[current_player][clue_available_play[current_player].index(1)] 
@@ -496,7 +504,7 @@ def play_clued_card_play_hand():
       # finish turn
       turn_finished = True
       # log
-      l = 'play_clued_card_play_hand'
+      l = 'play_clued_card_play_hand: '+str(l_card)
       log += '\n'+l
    return(turn_finished)
 
@@ -584,11 +592,6 @@ def play_hanabi():
                            if clue_positive_play_hand() == False:
                               if discard_play_hand() == False:
                                  discard_keep_hand()
-      # no keep hand
-      # if play_clued_card_play_hand() == False:
-         # if clue_positive_play_hand() == False:
-            # discard_play_hand()
-      # Turn finished, swap roles
       if turn == 0:
          turn = 1
       else:
